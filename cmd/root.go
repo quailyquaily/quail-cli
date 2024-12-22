@@ -76,8 +76,10 @@ func initConfig() {
 	cfgFile = common.ConfigViper(cfgFile)
 
 	if err := viper.ReadInConfig(); err != nil {
-		slog.Error("failed to read config", "error", err, "config", cfgFile)
-		panic(err)
+		// if the config file does not exist, ask the user to login
+		fmt.Println("Config file does not exist. Please login.")
+		common.Login(authBase, apiBase)
+		return
 	}
 
 	accessToken = viper.GetString("app.access_token")
