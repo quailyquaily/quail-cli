@@ -1,6 +1,6 @@
 # Quail CLI
 
-`quail-cli` is a command-line interface for interacting with [Quail](https://quail.ink), designed to simplify and automate operations such as user authentication, managing posts, and fetching user details.
+`quail-cli` is a command-line interface for interacting with [Quail](https://quaily.com), designed to simplify and automate operations such as user authentication, managing posts, and fetching user details.
 
 Quail CLI interacts with the Quail API at `https://api.quail.ink`.
 
@@ -30,7 +30,7 @@ $ quail-cli [command]
 ### Global Flags
 
 - `--api-base string`: Quail API base URL (default: `https://api.quail.ink`).
-- `--auth-base string`: Quail Auth base URL (default: `https://quail.ink`).
+- `--auth-base string`: Quail Auth base URL (default: `https://quaily.com`).
 - `--config string`: Path to the configuration file (default: `$HOME/.config/quail-cli/config.yaml`).
 - `--format string`: Specify output format, either `human` (human-readable) or `json` (default: `human`).
 - `-h, --help`: Display help information for the `quail-cli`.
@@ -63,6 +63,11 @@ Get the details of the currently authenticated user.
 ```bash
 $ quail-cli post upsert your_markdown_file.md -l your_list_slug
 ```
+
+in which,
+
+- `your_markdown_file.md` is the path to the markdown file.
+- `your_list_slug` is the slug of the list where the post will be created or updated. For example, if the list URL is `https://quaily.com/my_list`, then `your_list_slug` is `my_list`.
 
 quail-cli will read the frontmatter from the markdown file to create or update a post. If the post does not exist, it will be created. If it exists, it will be updated.
 
@@ -114,7 +119,9 @@ $ quail-cli post delete -l your_list_slug -p your_post_slug
 
 ## Configuration
 
-By default, `quail-cli` reads from `$HOME/.config/quail-cli/config.yaml`. You can specify a different configuration file by using the `--config` flag.
+By default, `quail-cli` reads from `$HOME/.config/quail-cli/config.yaml`. if the file does not exist, it will be created after the first login.
+
+You can specify a different configuration file by using the `--config` flag.
 
 ```bash
 $ quail-cli --config /path/to/config.yaml

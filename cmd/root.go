@@ -64,7 +64,7 @@ func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.config/quail-cli/config.yaml)")
 	rootCmd.PersistentFlags().StringVar(&apiBase, "api-base", "https://api.quail.ink", "Quail API base URL")
-	rootCmd.PersistentFlags().StringVar(&authBase, "auth-base", "https://quail.ink", "Quail Auth base URL")
+	rootCmd.PersistentFlags().StringVar(&authBase, "auth-base", "https://quaily.com", "Quail Auth base URL")
 	rootCmd.PersistentFlags().StringVar(&format, "format", "human", "the output format (human: human readable, json: JSON)")
 
 	rootCmd.AddCommand(login.NewCmd())
