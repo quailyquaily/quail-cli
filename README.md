@@ -9,7 +9,7 @@ Quail CLI interacts with the Quail API at `https://api.quail.ink`.
 To install `quail-cli`, you can use the following command:
 
 ```bash
-$ go install github.com/quail-ink/quail-cli@latest
+$ go install github.com/quailyquaily/quail-cli@latest
 ```
 
 ## Usage
