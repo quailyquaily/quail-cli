@@ -4,13 +4,21 @@
 
 Quail CLI interacts with the Quail API at `https://api.quail.ink`.
 
-## Installation
+## Install the latest release
 
-To install `quail-cli`, you can use the following command:
+Please Check the latest release [here](https://github.com/quailyquaily/quail-cli/releases), and download the binary for your platform.
+
+Please extract the binary and put it in your `PATH`.
+
+## Install manually
+
+To manually install `quail-cli`, you can use the following command:
 
 ```bash
 $ go install github.com/quailyquaily/quail-cli@latest
 ```
+
+> you need to have `go` installed to install `quail-cli` manually. Please refer to the [official Go installation guide](https://go.dev/doc/install) for more information.
 
 ## Usage
 
