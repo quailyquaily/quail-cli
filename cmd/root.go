@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/quail-ink/quail-cli/client"
@@ -73,12 +74,35 @@ func init() {
 }
 
 func initConfig() {
-	cfgFile = common.ConfigViper(cfgFile)
+	if cfgFile != "" {
+		// Use config file from the flag
+		viper.SetConfigFile(cfgFile)
+	} else {
 
+		fullpath := common.GetConfigFilePath()
+
+		viper.AddConfigPath(fullpath)
+		viper.SetConfigType("yaml")
+		viper.SetConfigName("config")
+
+		cfgFile = filepath.Join(fullpath, "config.yaml")
+
+		viper.SetConfigFile(cfgFile)
+
+		if _, err := os.Stat(viper.ConfigFileUsed()); os.IsNotExist(err) {
+
+			// if the config file does not exist, ask the user to login
+			fmt.Println("Config file does not exist. Please login.")
+			common.Login(authBase, apiBase)
+			return
+		}
+	}
+
+	viper.AutomaticEnv()
+
+	// If a config file is found, read it in
 	if err := viper.ReadInConfig(); err != nil {
-		// if the config file does not exist, ask the user to login
-		fmt.Println("Config file does not exist. Please login.")
-		common.Login(authBase, apiBase)
+		fmt.Println("failed to read config", err, "config", viper.ConfigFileUsed())
 		return
 	}
 

@@ -13,7 +13,7 @@ builds:
       - darwin
 
 archives:
-  - formats: [ 'tar.gz' ]
+  - formats: ["tar.gz"]
     # this name template makes the OS and Arch compatible with the results of uname.
     name_template: >-
       {{ .ProjectName }}_
@@ -24,16 +24,16 @@ archives:
       {{- if .Arm }}v{{ .Arm }}{{ end }}
     # use zip for windows archives
     format_overrides:
-    - goos: windows
-      formats: [ 'zip' ]
+      - goos: windows
+        formats: ["zip"]
 
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 snapshot:
   version_template: "{{ .Tag }}-{{ .ShortCommit }}"
 changelog:
   sort: asc
   filters:
     exclude:
-    - '^docs:'
-    - '^test:'
+      - "^docs:"
+      - "^test:"

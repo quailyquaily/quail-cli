@@ -2,7 +2,6 @@ package post
 
 import (
 	"fmt"
-	"log/slog"
 	"time"
 
 	"github.com/quail-ink/quail-cli/client"
@@ -91,12 +90,6 @@ func NewCmd() *cobra.Command {
 
 			format := cmd.Context().Value(common.CTX_FORMAT{}).(string)
 			cl := cmd.Context().Value(common.CTX_CLIENT{}).(*client.Client)
-			cfgFile := cmd.Context().Value(common.CTX_CONFIG_FILE{}).(string)
-			cfgFile = common.ConfigViper(cfgFile)
-			if err := viper.ReadInConfig(); err != nil {
-				slog.Error("failed to read config", "error", err, "config", cfgFile)
-				panic(err)
-			}
 
 			frontMatterMapping := viper.GetStringMapString("post.frontmatter_mapping")
 

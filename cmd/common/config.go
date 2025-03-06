@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+	"path"
 	"path/filepath"
 
 	"github.com/quail-ink/quail-cli/oauth"
@@ -24,28 +25,16 @@ const (
 	FORMAT_HUMAN = "human"
 )
 
-func ConfigViper(cfgFile string) string {
-	if cfgFile != "" {
-		viper.SetConfigFile(cfgFile)
-	} else {
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
+func GetConfigFilePath() string {
+	home, err := os.UserHomeDir()
+	cobra.CheckErr(err)
 
-		fullpath := filepath.Join(home, ".config", "quail-cli")
-		if _, err := os.Stat(fullpath); os.IsNotExist(err) {
-			os.MkdirAll(fullpath, 0755)
-		}
-
-		viper.AddConfigPath(fullpath)
-		viper.SetConfigType("yaml")
-		viper.SetConfigName("config")
-
-		cfgFile = filepath.Join(fullpath, "config.yaml")
+	fullpath := filepath.Join(home, ".config", "quail-cli")
+	if _, err := os.Stat(fullpath); os.IsNotExist(err) {
+		os.MkdirAll(fullpath, 0755)
 	}
 
-	viper.AutomaticEnv()
-
-	return cfgFile
+	return fullpath
 }
 
 func Login(authBase, apiBase string) (err error) {
@@ -55,17 +44,17 @@ func Login(authBase, apiBase string) (err error) {
 		return
 	}
 
-	fullpath := ConfigViper("")
-
 	viper.Set("app.access_token", token.AccessToken)
 	viper.Set("app.refresh_token", token.RefreshToken)
 	viper.Set("app.token_type", token.TokenType)
 	viper.Set("app.expiry", token.Expiry)
 
+	fullpath := GetConfigFilePath()
+
 	// if the config file doesn't exist, create it first
-	err = viper.WriteConfigAs(fullpath)
+	err = viper.WriteConfigAs(path.Join(fullpath, "config.yaml"))
 	if err != nil {
-		slog.Error("failed to save config", "error", err, "config", fullpath)
+		slog.Error("failed to save config", "error", err, "dir", fullpath)
 		return
 	}
 

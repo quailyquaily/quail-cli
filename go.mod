@@ -1,11 +1,14 @@
 module github.com/quail-ink/quail-cli
 
-go 1.22.4
+go 1.23
+
+toolchain go1.24.0
 
 require github.com/spf13/viper v1.19.0
 
 require (
 	github.com/gofrs/uuid v4.4.0+incompatible // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 )
 
@@ -14,6 +17,7 @@ require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/lyricat/goutils v0.0.4
 	github.com/magiconair/properties v1.8.7 // indirect
+	github.com/mark3labs/mcp-go v0.11.2
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
