@@ -14,8 +14,10 @@ import (
 	"github.com/quail-ink/quail-cli/client"
 	"github.com/quail-ink/quail-cli/cmd/common"
 	"github.com/quail-ink/quail-cli/cmd/login"
+	"github.com/quail-ink/quail-cli/cmd/mcp"
 	"github.com/quail-ink/quail-cli/cmd/me"
 	"github.com/quail-ink/quail-cli/cmd/post"
+	"github.com/quail-ink/quail-cli/cmd/version"
 	"github.com/quail-ink/quail-cli/oauth"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -33,14 +35,13 @@ var (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "quail-cli",
-	Short: "A CLI tool for interacting with Quail's API",
-	Long:  `quail-cli is a command-line interface for sending requests to Quail's API at https://api.quail.ink`,
+	Short: "A CLI tool for interacting with Quaily's API",
+	Long:  `quail-cli is a command-line interface for sending requests to Quaily's API at https://api.quail.ink`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		ctx := cmd.Context()
 
-		ctx = context.WithValue(ctx, common.CTX_CONFIG_FILE{}, cfgFile)
 		ctx = context.WithValue(ctx, common.CTX_CLIENT{}, cl)
 		ctx = context.WithValue(ctx, common.CTX_API_BASE{}, apiBase)
 		ctx = context.WithValue(ctx, common.CTX_AUTH_BASE{}, authBase)
@@ -71,6 +72,8 @@ func init() {
 	rootCmd.AddCommand(login.NewCmd())
 	rootCmd.AddCommand(me.NewCmd())
 	rootCmd.AddCommand(post.NewCmd())
+	rootCmd.AddCommand(mcp.NewCmd())
+	rootCmd.AddCommand(version.NewCmd())
 }
 
 func initConfig() {

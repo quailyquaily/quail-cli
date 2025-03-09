@@ -141,7 +141,7 @@ func NewCmd() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&listSlug, "list", "l", "", "List slug")
+	cmd.Flags().StringVarP(&listSlug, "list", "l", "", "Channel slug")
 	cmd.Flags().StringVarP(&postSlug, "post", "p", "", "Post slug")
 	cmd.Flags().BoolVar(&doPublish, "publish", false, "Publish the post")
 

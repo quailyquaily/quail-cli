@@ -13,11 +13,11 @@ import (
 )
 
 type (
-	CTX_CONFIG_FILE struct{}
-	CTX_CLIENT      struct{}
-	CTX_API_BASE    struct{}
-	CTX_AUTH_BASE   struct{}
-	CTX_FORMAT      struct{}
+	CTX_CLIENT    struct{}
+	CTX_API_BASE  struct{}
+	CTX_AUTH_BASE struct{}
+	CTX_FORMAT    struct{}
+	CTX_VERSION   struct{}
 )
 
 const (

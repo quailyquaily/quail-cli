@@ -1,3 +1,4 @@
 quail-cli
 sample.md
 dist/*
+*.sh

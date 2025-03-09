@@ -52,3 +52,17 @@ func (c *Client) ModPost(listIDOrSlug, slug, op string) (*PostResponse, error) {
 	}
 	return pr, nil
 }
+
+func (c *Client) Search(query string) (*SearchResponse, error) {
+	payload := make(map[string]any)
+	payload["q"] = query
+	resp, err := c.sendRequest("POST", fmt.Sprintf("%s/posts/search", c.APIBase), payload)
+	if err != nil {
+		return nil, err
+	}
+	pr := &SearchResponse{}
+	if err := json.Unmarshal(resp, pr); err != nil {
+		return nil, err
+	}
+	return pr, nil
+}

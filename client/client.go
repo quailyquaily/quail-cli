@@ -79,12 +79,15 @@ func (c *Client) sendRequest(method, url string, payload any) ([]byte, error) {
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode != http.StatusOK {
+		buf, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("status code: %d, body: %s", resp.StatusCode, string(buf))
+	}
+
 	buf, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
-
-	// fmt.Printf("buf: %v\n", string(buf))
 
 	return buf, nil
 }

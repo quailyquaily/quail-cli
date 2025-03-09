@@ -109,8 +109,6 @@ func RefreshToken(apiBase, refreshToken string) (*oauth2.Token, error) {
 		return nil, err
 	}
 
-	fmt.Printf("body: %+v\n", string(body))
-
 	var token oauth2.Token
 	err = json.Unmarshal(body, &token)
 	if err != nil {
