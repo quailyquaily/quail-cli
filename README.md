@@ -151,7 +151,7 @@ The server will start a HTTP server and listen on port 8083. You can use any MCP
 Before configuring the quail-cli as a MCP server in stdio mode, you need to install quail-cli. And then, find the path of the `quail-cli` binary and pass `mcp` as the argument to the quail-cli.
 
 ```bash
-/home/lyric/go/bin/quail-cli mcp
+/your_install_path/quail-cli mcp
 ```
 
 ### Interact with quail-cli via MCP client
@@ -189,6 +189,11 @@ app:
   expiry: ""
   refresh_token: ""
   token_type: ""
+  user:
+    id: 1
+    name: "your_name"
+    bio: "your_bio"
+    
 post:
   # frontmatter_mapping is used to map the frontmatter keys
   # for this example:
