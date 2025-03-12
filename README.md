@@ -20,7 +20,7 @@ $ go install github.com/quailyquaily/quail-cli@latest
 
 > you need to have `go` installed to install `quail-cli` manually. Please refer to the [official Go installation guide](https://go.dev/doc/install) for more information.
 
-## Usage
+## Usage (command line)
 
 After installation, you can start using `quail-cli` by calling the following command:
 
@@ -42,8 +42,6 @@ $ quail-cli [command]
 - `--config string`: Path to the configuration file (default: `$HOME/.config/quail-cli/config.yaml`).
 - `--format string`: Specify output format, either `human` (human-readable) or `json` (default: `human`).
 - `-h, --help`: Display help information for the `quail-cli`.
-
-## Usage
 
 ### Authenticate with Quail
 
@@ -124,6 +122,53 @@ $ quail-cli post deliver -l your_list_slug -p your_post_slug
 ```bash
 $ quail-cli post delete -l your_list_slug -p your_post_slug
 ```
+
+## Usage (MCP server)
+
+> [!WARNING]
+> This feature is experimental.
+
+MCP(Model Context Protocol) is a protocol for interacting with AI models (like Claude, GPT, etc.). quail-cli can be used as a MCP server.
+
+Before that, you need to login to quail-cli by running the following command:
+
+```bash
+$ quail-cli login
+```
+
+**SSE mode**
+
+Run the following command to start the MCP server in SSE mode.
+
+```bash
+$ quail-cli mcp --sse
+```
+
+The server will start a HTTP server and listen on port 8083. You can use any MCP client to connect to this server by providing the URL `http://localhost:8083/sse`.
+
+**Stdio mode**
+
+Before configuring the quail-cli as a MCP server in stdio mode, you need to install quail-cli. And then, find the path of the `quail-cli` binary and pass `mcp` as the argument to the quail-cli.
+
+```bash
+/home/lyric/go/bin/quail-cli mcp
+```
+
+### Interact with quail-cli via MCP client
+
+Here is an example prompt:
+
+> what's the url of the 1th post of my first channel?
+
+The LLM will call a series of tools from quail-cli to get the answer.
+
+### Supported tools
+
+- `search_post`: search a post.
+- `get_my_channels`: get all channels of the current user.
+- `get_my_channel_posts`: get posts of a specific channel.
+- `get_quaily_url`: get the url of a post or a channel.
+- `publish_post`: publish a post.
 
 ## Configuration
 
