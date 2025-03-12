@@ -7,6 +7,7 @@ import (
 	"path"
 	"path/filepath"
 
+	"github.com/quail-ink/quail-cli/client"
 	"github.com/quail-ink/quail-cli/oauth"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -48,6 +49,16 @@ func Login(authBase, apiBase string) (err error) {
 	viper.Set("app.refresh_token", token.RefreshToken)
 	viper.Set("app.token_type", token.TokenType)
 	viper.Set("app.expiry", token.Expiry)
+
+	cl := client.New(token.AccessToken, apiBase)
+	result, err := cl.GetMe()
+	if err != nil {
+		slog.Error("failed to get me", "error", err)
+		return
+	}
+	viper.Set("app.user.id", result.Data.ID)
+	viper.Set("app.user.name", result.Data.Name)
+	viper.Set("app.user.bio", result.Data.Bio)
 
 	fullpath := GetConfigFilePath()
 

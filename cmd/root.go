@@ -93,7 +93,6 @@ func initConfig() {
 		viper.SetConfigFile(cfgFile)
 
 		if _, err := os.Stat(viper.ConfigFileUsed()); os.IsNotExist(err) {
-
 			// if the config file does not exist, ask the user to login
 			fmt.Println("Config file does not exist. Please login.")
 			common.Login(authBase, apiBase)

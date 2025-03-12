@@ -46,12 +46,19 @@ type (
 	}
 
 	List struct {
-		ID   uint64 `json:"id"`
-		Slug string `json:"slug"`
+		ID          uint64 `json:"id"`
+		Slug        string `json:"slug"`
+		Title       string `json:"title"`
+		Description string `json:"description"`
+		Tagline     string `json:"tagline"`
 	}
 
 	PostResponse struct {
 		Data Post `json:"data"`
+	}
+
+	ListsResponse struct {
+		Data []List `json:"data"`
 	}
 
 	PaginationResponse struct {
