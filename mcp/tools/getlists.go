@@ -3,7 +3,6 @@ package tools
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log/slog"
 	"strings"
 
@@ -22,7 +21,6 @@ func handleListsTool(cl *client.Client) func(ctx context.Context, request mcp.Ca
 			slog.Error("failed to get user lists", "error", err)
 			return nil, err
 		}
-		fmt.Printf("lists: %v\n", lists)
 		res := make([]string, 0)
 		for _, list := range lists {
 			jsonItem := make(map[string]any)

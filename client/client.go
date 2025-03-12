@@ -36,9 +36,17 @@ func New(accessToken, apiBase string) *Client {
 	}
 }
 
-func (c *Client) GetList(listID string) (any, error) {
-	url := fmt.Sprintf("%s/lists/%s", c.APIBase, listID)
-	return c.sendRequest("GET", url, nil)
+func (c *Client) GetList(listID uint64) (*ListResponse, error) {
+	url := fmt.Sprintf("%s/lists/%d", c.APIBase, listID)
+	resp, err := c.sendRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	lr := &ListResponse{}
+	if err := json.Unmarshal(resp, lr); err != nil {
+		return nil, err
+	}
+	return lr, nil
 }
 
 func (c *Client) GetMe() (*UserResponse, error) {

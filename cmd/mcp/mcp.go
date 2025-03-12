@@ -69,6 +69,20 @@ func NewCmd() *cobra.Command {
 			}
 			s.AddTool(searchTool, searchToolHandler)
 
+			getListPostsTool, getListPostsToolHandler, err := tools.GetListPostsTool(cl)
+			if err != nil {
+				slog.Error("failed to get list posts tool", "error", err)
+				return
+			}
+			s.AddTool(getListPostsTool, getListPostsToolHandler)
+
+			getURLTool, getURLToolHandler, err := tools.GetURLTool(cl)
+			if err != nil {
+				slog.Error("failed to get url tool", "error", err)
+				return
+			}
+			s.AddTool(getURLTool, getURLToolHandler)
+
 			// Start the server
 			if useSSE {
 				sseServer := mcps.NewSSEServer(s, fmt.Sprintf("http://localhost:%d", ssePort))

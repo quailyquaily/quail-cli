@@ -61,6 +61,10 @@ type (
 		Data []List `json:"data"`
 	}
 
+	ListResponse struct {
+		Data List `json:"data"`
+	}
+
 	PaginationResponse struct {
 		Pagination struct {
 			Current    uint64 `json:"current"`

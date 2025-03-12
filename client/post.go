@@ -2,11 +2,12 @@ package client
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 )
 
-func (c *Client) GetPost(listIDOrSlug string, slug string) (*PostResponse, error) {
-	resp, err := c.sendRequest("GET", fmt.Sprintf("%s/lists/%s/posts/%s", c.APIBase, listIDOrSlug, slug), nil)
+func (c *Client) GetPost(listIDOrSlug string, postIDOrSlug string) (*PostResponse, error) {
+	resp, err := c.sendRequest("GET", fmt.Sprintf("%s/lists/%s/posts/%s", c.APIBase, listIDOrSlug, postIDOrSlug), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -65,4 +66,25 @@ func (c *Client) Search(query string) (*SearchResponse, error) {
 		return nil, err
 	}
 	return pr, nil
+}
+
+// GetListPosts retrieves posts from a specific list
+func (c *Client) GetListPosts(listID uint64, offset, limit int) (*SearchResponse, error) {
+	if listID == 0 {
+		return nil, errors.New("list ID is required")
+	}
+
+	url := fmt.Sprintf("%s/lists/%d/posts?offset=%d&limit=%d", c.APIBase, listID, offset, limit)
+
+	resp, err := c.sendRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	sr := &SearchResponse{}
+	if err := json.Unmarshal(resp, sr); err != nil {
+		return nil, err
+	}
+
+	return sr, nil
 }
