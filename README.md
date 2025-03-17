@@ -164,11 +164,13 @@ The LLM will call a series of tools from quail-cli to get the answer.
 
 ### Supported tools
 
+- `login`: login to quail.
 - `search_post`: search a post.
 - `get_my_channels`: get all channels of the current user.
 - `get_my_channel_posts`: get posts of a specific channel.
-- `get_quaily_url`: get the url of a post or a channel.
+- `get_post`: get a post.
 - `publish_post`: publish a post.
+- `get_quaily_url`: get the url of a post or a channel.
 
 ## Configuration
 
