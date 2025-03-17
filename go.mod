@@ -1,4 +1,4 @@
-module github.com/quail-ink/quail-cli
+module github.com/quailyquaily/quail-cli
 
 go 1.23
 

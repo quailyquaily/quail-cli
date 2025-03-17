@@ -7,8 +7,8 @@ import (
 	"path"
 	"path/filepath"
 
-	"github.com/quail-ink/quail-cli/client"
-	"github.com/quail-ink/quail-cli/oauth"
+	"github.com/quailyquaily/quail-cli/client"
+	"github.com/quailyquaily/quail-cli/oauth"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

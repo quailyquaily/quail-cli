@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/quail-ink/quail-cli/core"
+	"github.com/quailyquaily/quail-cli/core"
 )
 
 func ParseMarkdownWithFrontMatter(filepath string, frontMatterMapping map[string]string) (*core.QuailPostFrontMatter, string, error) {

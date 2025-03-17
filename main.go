@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 
-	"github.com/quail-ink/quail-cli/cmd"
-	"github.com/quail-ink/quail-cli/cmd/common"
+	"github.com/quailyquaily/quail-cli/cmd"
+	"github.com/quailyquaily/quail-cli/cmd/common"
 )
 
 var (

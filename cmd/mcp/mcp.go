@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/quail-ink/quail-cli/client"
-	"github.com/quail-ink/quail-cli/cmd/common"
-	"github.com/quail-ink/quail-cli/mcp/resources"
-	"github.com/quail-ink/quail-cli/mcp/tools"
+	"github.com/quailyquaily/quail-cli/client"
+	"github.com/quailyquaily/quail-cli/cmd/common"
+	"github.com/quailyquaily/quail-cli/mcp/resources"
+	"github.com/quailyquaily/quail-cli/mcp/tools"
 	"github.com/spf13/cobra"
 
 	"github.com/mark3labs/mcp-go/server"

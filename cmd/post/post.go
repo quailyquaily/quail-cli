@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/quail-ink/quail-cli/client"
-	"github.com/quail-ink/quail-cli/cmd/common"
-	"github.com/quail-ink/quail-cli/util"
+	"github.com/quailyquaily/quail-cli/client"
+	"github.com/quailyquaily/quail-cli/cmd/common"
+	"github.com/quailyquaily/quail-cli/util"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
