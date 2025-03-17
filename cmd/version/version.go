@@ -3,7 +3,7 @@ package version
 import (
 	"fmt"
 
-	"github.com/quail-ink/quail-cli/cmd/common"
+	"github.com/quailyquaily/quail-cli/cmd/common"
 	"github.com/spf13/cobra"
 )
 

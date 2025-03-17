@@ -9,7 +9,7 @@ import (
 
 	"github.com/mark3labs/mcp-go/mcp"
 	mcps "github.com/mark3labs/mcp-go/server"
-	"github.com/quail-ink/quail-cli/client"
+	"github.com/quailyquaily/quail-cli/client"
 )
 
 func handleSearchTool(cl *client.Client) func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {

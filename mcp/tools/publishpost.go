@@ -8,8 +8,8 @@ import (
 
 	"github.com/mark3labs/mcp-go/mcp"
 	mcps "github.com/mark3labs/mcp-go/server"
-	"github.com/quail-ink/quail-cli/client"
-	"github.com/quail-ink/quail-cli/util"
+	"github.com/quailyquaily/quail-cli/client"
+	"github.com/quailyquaily/quail-cli/util"
 )
 
 func handlePublishPostTool(cl *client.Client) func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
