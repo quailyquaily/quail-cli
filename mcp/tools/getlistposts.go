@@ -39,6 +39,7 @@ func handleListPostsTool(cl *client.Client) func(ctx context.Context, request mc
 			jsonItem["slug"] = item.Slug
 			jsonItem["title"] = item.Title
 			jsonItem["summary"] = item.Summary
+			jsonItem["is_paid_content"] = item.IsPaidContent
 			buf, err := json.Marshal(jsonItem)
 			if err != nil {
 				continue

@@ -69,6 +69,7 @@ func GetPostTool(cl *client.Client) (mcp.Tool, mcps.ToolHandlerFunc, error) {
 	tool := mcp.NewTool("get_post",
 		mcp.WithDescription(`Return the post of a given channel and post slug. The channel is specified by the channel slug.
 		If there is an URL, the tool will accept the URL as well. The URL should be in the format of "https://quaily.com/{channel_slug}/{post_slug}".
+		The tool returns the post data in JSON format. The content of the post is included in the field "content" and "paid_content" if the post is paid.
 		`),
 		mcp.WithString("channel_slug",
 			mcp.Description("The slug of the channel"),

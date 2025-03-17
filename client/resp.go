@@ -43,6 +43,7 @@ type (
 		PublishedAt      time.Time `json:"published_at"`
 		FirstPublishedAt time.Time `json:"first_published_at"`
 		List             List      `json:"list"`
+		IsPaidContent    bool      `json:"is_paid_content"`
 	}
 
 	List struct {
