@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/lyricat/goutils/uuid"
+	"github.com/pkg/browser"
 	"golang.org/x/oauth2"
 )
 
@@ -23,7 +24,7 @@ const (
 	clientSecret = ""
 )
 
-func Login(authBase, apiBase string) (*oauth2.Token, error) {
+func Login(authBase, apiBase string) (*oauth2.Token, string, error) {
 	state := uuid.New()
 
 	verifier := generateCodeVerifier()
@@ -46,7 +47,14 @@ func Login(authBase, apiBase string) (*oauth2.Token, error) {
 	authCodeURL := conf.AuthCodeURL(state, oauth2.SetAuthURLParam("code_challenge", challenge),
 		oauth2.SetAuthURLParam("code_challenge_method", "plain"))
 
-	fmt.Printf("Please visit this URL to authorize the application: %v\n", authCodeURL)
+	fmt.Printf("Please visit this URL to authorize the application:\n%v\n", authCodeURL)
+
+	// use the default browser to open the URL
+	err := browser.OpenURL(authCodeURL)
+	if err != nil {
+		slog.Error("failed to open URL", "error", err, "url", authCodeURL)
+		return nil, authCodeURL, err
+	}
 
 	// start a local server to handle the redirect
 	codeChan := make(chan string)
@@ -72,15 +80,15 @@ func Login(authBase, apiBase string) (*oauth2.Token, error) {
 	code := <-codeChan
 
 	if code == "" {
-		return nil, fmt.Errorf("failed to get authorization code")
+		return nil, authCodeURL, fmt.Errorf("failed to get authorization code")
 	}
 
 	token, err := exchangeCodeForToken(apiBase, code, verifier)
 	if err != nil {
-		return nil, fmt.Errorf("failed to exchange code for token: %v", err)
+		return nil, authCodeURL, fmt.Errorf("failed to exchange code for token: %v", err)
 	}
 
-	return token, nil
+	return token, authCodeURL, nil
 }
 
 func RefreshToken(apiBase, refreshToken string) (*oauth2.Token, error) {

@@ -1,4 +1,4 @@
-package common
+package util
 
 import (
 	"fmt"
@@ -13,19 +13,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-type (
-	CTX_CLIENT    struct{}
-	CTX_API_BASE  struct{}
-	CTX_AUTH_BASE struct{}
-	CTX_FORMAT    struct{}
-	CTX_VERSION   struct{}
-)
-
-const (
-	FORMAT_JSON  = "json"
-	FORMAT_HUMAN = "human"
-)
-
 func GetConfigFilePath() string {
 	home, err := os.UserHomeDir()
 	cobra.CheckErr(err)
@@ -38,8 +25,8 @@ func GetConfigFilePath() string {
 	return fullpath
 }
 
-func Login(authBase, apiBase string) (err error) {
-	token, err := oauth.Login(authBase, apiBase)
+func Login(authBase, apiBase string) (authCodeURL string, err error) {
+	token, authCodeURL, err := oauth.Login(authBase, apiBase)
 	if err != nil {
 		slog.Error("failed to login", "error", err)
 		return
@@ -70,5 +57,5 @@ func Login(authBase, apiBase string) (err error) {
 	}
 
 	fmt.Printf("Login successful. Access token saved to %s\n", fullpath)
-	return nil
+	return
 }

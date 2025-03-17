@@ -28,8 +28,9 @@ func NewCmd() *cobra.Command {
 		Use:   "mcp",
 		Short: "Start a MCP server",
 		Run: func(cmd *cobra.Command, args []string) {
-			cl := cmd.Context().Value(common.CTX_CLIENT{}).(*client.Client)
-			version := cmd.Context().Value(common.CTX_VERSION{}).(string)
+			ctx := cmd.Context()
+			cl := ctx.Value(common.CTX_CLIENT{}).(*client.Client)
+			version := ctx.Value(common.CTX_VERSION{}).(string)
 
 			s := mcps.NewMCPServer(
 				"Quail CLI MCP Server",
@@ -82,6 +83,13 @@ func NewCmd() *cobra.Command {
 				return
 			}
 			s.AddTool(getURLTool, getURLToolHandler)
+
+			loginTool, loginToolHandler, err := tools.LoginTool(ctx, cl)
+			if err != nil {
+				slog.Error("failed to get login tool", "error", err)
+				return
+			}
+			s.AddTool(loginTool, loginToolHandler)
 
 			// Start the server
 			if useSSE {
