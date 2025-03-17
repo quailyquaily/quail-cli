@@ -6,11 +6,10 @@ import (
 
 	"github.com/quailyquaily/quail-cli/client"
 	"github.com/quailyquaily/quail-cli/cmd/common"
+	"github.com/quailyquaily/quail-cli/mcp"
 	"github.com/quailyquaily/quail-cli/mcp/resources"
-	"github.com/quailyquaily/quail-cli/mcp/tools"
 	"github.com/spf13/cobra"
 
-	"github.com/mark3labs/mcp-go/server"
 	mcps "github.com/mark3labs/mcp-go/server"
 )
 
@@ -49,47 +48,10 @@ func NewCmd() *cobra.Command {
 			s.AddResource(listsRes, listsResHandler)
 
 			// add tools
-			listsTool, listsToolHandler, err := tools.GetListsTool(cl)
-			if err != nil {
-				slog.Error("failed to get lists tool", "error", err)
+			if err := mcp.AddTools(ctx, s, cl); err != nil {
+				slog.Error("failed to add tools", "error", err)
 				return
 			}
-			s.AddTool(listsTool, listsToolHandler)
-
-			publishPostTool, publishPostToolHandler, err := tools.GetPublishPostTool(cl)
-			if err != nil {
-				slog.Error("failed to get publish post tool", "error", err)
-				return
-			}
-			s.AddTool(publishPostTool, publishPostToolHandler)
-
-			searchTool, searchToolHandler, err := tools.GetSearchTool(cl)
-			if err != nil {
-				slog.Error("failed to get search tool", "error", err)
-				return
-			}
-			s.AddTool(searchTool, searchToolHandler)
-
-			getListPostsTool, getListPostsToolHandler, err := tools.GetListPostsTool(cl)
-			if err != nil {
-				slog.Error("failed to get list posts tool", "error", err)
-				return
-			}
-			s.AddTool(getListPostsTool, getListPostsToolHandler)
-
-			getURLTool, getURLToolHandler, err := tools.GetURLTool(cl)
-			if err != nil {
-				slog.Error("failed to get url tool", "error", err)
-				return
-			}
-			s.AddTool(getURLTool, getURLToolHandler)
-
-			loginTool, loginToolHandler, err := tools.LoginTool(ctx, cl)
-			if err != nil {
-				slog.Error("failed to get login tool", "error", err)
-				return
-			}
-			s.AddTool(loginTool, loginToolHandler)
 
 			// Start the server
 			if useSSE {
@@ -99,7 +61,7 @@ func NewCmd() *cobra.Command {
 					slog.Error("failed to start SSE server", "error", err)
 				}
 			} else {
-				if err := server.ServeStdio(s); err != nil {
+				if err := mcps.ServeStdio(s); err != nil {
 					slog.Error("failed to serve stdio", "error", err)
 				}
 			}
