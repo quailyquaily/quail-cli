@@ -59,5 +59,12 @@ func AddTools(ctx context.Context, s *mcps.MCPServer, cl *client.Client) error {
 	}
 	s.AddTool(getPostTool, getPostToolHandler)
 
+	getPostContentTool, getPostContentToolHandler, err := tools.GetPostContentTool(cl)
+	if err != nil {
+		slog.Error("failed to get get post content tool", "error", err)
+		return err
+	}
+	s.AddTool(getPostContentTool, getPostContentToolHandler)
+
 	return nil
 }

@@ -58,6 +58,13 @@ type (
 		Data Post `json:"data"`
 	}
 
+	PostContentResponse struct {
+		Data struct {
+			FreeContent string `json:"free-content"`
+			PaidContent string `json:"paid-content"`
+		} `json:"data"`
+	}
+
 	ListsResponse struct {
 		Data []List `json:"data"`
 	}

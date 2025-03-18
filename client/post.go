@@ -18,6 +18,18 @@ func (c *Client) GetPost(listIDOrSlug string, postIDOrSlug string) (*PostRespons
 	return pr, nil
 }
 
+func (c *Client) GetPostContent(listIDOrSlug string, postIDOrSlug string) (*PostContentResponse, error) {
+	resp, err := c.sendRequest("GET", fmt.Sprintf("%s/lists/%s/posts/%s/content", c.APIBase, listIDOrSlug, postIDOrSlug), nil)
+	if err != nil {
+		return nil, err
+	}
+	pr := &PostContentResponse{}
+	if err := json.Unmarshal(resp, pr); err != nil {
+		return nil, err
+	}
+	return pr, nil
+}
+
 func (c *Client) CreatePost(listIDOrSlug string, payload map[string]any) (*PostResponse, error) {
 	resp, err := c.sendRequest("POST", fmt.Sprintf("%s/lists/%s/posts", c.APIBase, listIDOrSlug), payload)
 	if err != nil {
