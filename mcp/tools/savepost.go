@@ -115,6 +115,7 @@ func GetSavePostTool(cl *client.Client) (mcp.Tool, mcps.ToolHandlerFunc, error) 
 	The tags could be empty or omitted, in which case the tool will use an empty string. Read it from the frontmatter.
 	The cover_image_url could be empty or omitted, in which case the tool will use an empty string. Read it from the frontmatter.
 	If the post is saved successfully, the tool will return the metadata of the post,
+	If the post is saved successfully, the tool will examine the returned data, if the "published_at" is not empty, which means the post is published, don't need to ask the user to publish it.
 	The tool must update the slug, datetime to the file, more specifically, the frontmatter in the markdown file.
 	`),
 		mcp.WithString("title", mcp.Description("Title of the post"), mcp.Required()),
