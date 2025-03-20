@@ -59,8 +59,8 @@ func handleListPostsTool(cl *client.Client) func(ctx context.Context, request mc
 }
 
 func GetListPostsTool(cl *client.Client) (mcp.Tool, mcps.ToolHandlerFunc, error) {
-	tool := mcp.NewTool("get_my_channel_posts",
-		mcp.WithDescription("Return the posts of a given channel. The channel is specified by the channel id."),
+	tool := mcp.NewTool("get_quaily_channel_posts",
+		mcp.WithDescription("Return the posts of a given quaily channel. The channel is specified by the channel id."),
 		mcp.WithNumber("channel_id",
 			mcp.Description("The id of the channel"),
 			mcp.Required(),

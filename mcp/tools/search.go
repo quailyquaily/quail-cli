@@ -48,7 +48,7 @@ func handleSearchTool(cl *client.Client) func(ctx context.Context, request mcp.C
 }
 
 func GetSearchTool(cl *client.Client) (mcp.Tool, mcps.ToolHandlerFunc, error) {
-	tool := mcp.NewTool("search",
+	tool := mcp.NewTool("search_quaily",
 		mcp.WithDescription("Search quaily.com for a given query"),
 		mcp.WithString("q",
 			mcp.Description("Query to search quaily.com for a given topic"),

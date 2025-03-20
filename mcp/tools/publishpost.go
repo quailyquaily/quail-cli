@@ -95,8 +95,8 @@ func handlePublishPostTool(cl *client.Client) func(ctx context.Context, request 
 }
 
 func GetPublishPostTool(cl *client.Client) (mcp.Tool, mcps.ToolHandlerFunc, error) {
-	tool := mcp.NewTool("publish_post",
-		mcp.WithDescription(`Publish a post to quaily according to the given payload.
+	tool := mcp.NewTool("publish_quaily_post",
+		mcp.WithDescription(`Publish a post to quaily.com according to the given payload.
 	The payload could be found at the current context.
 	It could be a markdown file which contains the post content and the frontmatter.
 	The tool will try to parse the markdown file and extract the title, summary, channel slug, and content from it.
