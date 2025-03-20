@@ -164,12 +164,13 @@ The LLM will call a series of tools from quail-cli to get the answer.
 
 ### Supported tools
 
-- `login`: login to quail.
-- `search_post`: search a post.
-- `get_my_channels`: get all channels of the current user.
-- `get_my_channel_posts`: get posts of a specific channel.
-- `get_post`: get a post.
-- `publish_post`: publish a post.
+- `login_to_quaily`: login to quaily.com.
+- `search_quaily`: search quaily.com for a given query.
+- `get_my_quaily_channels`: get all quaily channels of the current user.
+- `get_quaily_channel_posts`: get posts of a specific quaily channel.
+- `get_quaily_post_content`: get the content of a post.
+- `get_quaily_post`: get a post.
+- `publish_quaily_post`: publish a post.
 - `get_quaily_url`: get the url of a post or a channel.
 
 ## Configuration
@@ -195,7 +196,7 @@ app:
     id: 1
     name: "your_name"
     bio: "your_bio"
-    
+
 post:
   # frontmatter_mapping is used to map the frontmatter keys
   # for this example:
