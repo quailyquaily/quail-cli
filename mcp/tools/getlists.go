@@ -48,7 +48,7 @@ func handleListsTool(cl *client.Client) func(ctx context.Context, request mcp.Ca
 }
 
 func GetListsTool(cl *client.Client) (mcp.Tool, mcps.ToolHandlerFunc, error) {
-	tool := mcp.NewTool("get_my_quaily_channels",
+	tool := mcp.NewTool("quaily_get_my_channels",
 		mcp.WithDescription("Return the quaily channels list of current user. The channels list items are json objects."),
 	)
 

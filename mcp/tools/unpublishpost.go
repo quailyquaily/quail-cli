@@ -11,7 +11,7 @@ import (
 	"github.com/quailyquaily/quail-cli/client"
 )
 
-func handlePublishPostTool(cl *client.Client) func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+func handleUnpublishPostTool(cl *client.Client) func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	return func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 		var (
 			ok          bool
@@ -32,9 +32,9 @@ func handlePublishPostTool(cl *client.Client) func(ctx context.Context, request 
 
 		result := ""
 
-		ret, err := cl.PublishPost(channelSlug, slug)
+		ret, err := cl.UnpublishPost(channelSlug, slug)
 		if err != nil {
-			slog.Error("failed to publish post", "error", err)
+			slog.Error("failed to unpublish post", "error", err)
 			result = err.Error()
 		} else {
 			buf, err := json.Marshal(ret.Data)
@@ -57,16 +57,14 @@ func handlePublishPostTool(cl *client.Client) func(ctx context.Context, request 
 	}
 }
 
-func GetPublishPostTool(cl *client.Client) (mcp.Tool, mcps.ToolHandlerFunc, error) {
-	tool := mcp.NewTool("quaily_publish_post",
-		mcp.WithDescription(`Publish a post to quaily.com according to the given channel slug and post slug.
-	The tool needs to save the post first, and then publish it.
-	If the post is published successfully, the tool will return the metadata of the post.
-	The tool will show the URL of the post to the user after publishing, the URL is like: https://quaily.com/{channel_slug}/p/{post_slug}.
+func GetUnpublishPostTool(cl *client.Client) (mcp.Tool, mcps.ToolHandlerFunc, error) {
+	tool := mcp.NewTool("quaily_unpublish_post",
+		mcp.WithDescription(`Unpublish a post from quaily.com according to the given channel slug and post slug.
+	If the post is unpublished successfully, the tool will return the metadata of the post.
 	`),
 		mcp.WithString("channel", mcp.Description("Channel slug to publish the post to"), mcp.Required()),
 		mcp.WithString("slug", mcp.Description("Slug of the post"), mcp.Required()),
 	)
 
-	return tool, handlePublishPostTool(cl), nil
+	return tool, handleUnpublishPostTool(cl), nil
 }

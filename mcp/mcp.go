@@ -24,6 +24,20 @@ func AddTools(ctx context.Context, s *mcps.MCPServer, cl *client.Client) error {
 	}
 	s.AddTool(publishPostTool, publishPostToolHandler)
 
+	unpublishPostTool, unpublishPostToolHandler, err := tools.GetUnpublishPostTool(cl)
+	if err != nil {
+		slog.Error("failed to get unpublish post tool", "error", err)
+		return err
+	}
+	s.AddTool(unpublishPostTool, unpublishPostToolHandler)
+
+	savePostTool, savePostToolHandler, err := tools.GetSavePostTool(cl)
+	if err != nil {
+		slog.Error("failed to get save post tool", "error", err)
+		return err
+	}
+	s.AddTool(savePostTool, savePostToolHandler)
+
 	searchTool, searchToolHandler, err := tools.GetSearchTool(cl)
 	if err != nil {
 		slog.Error("failed to get search tool", "error", err)

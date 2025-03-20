@@ -66,7 +66,7 @@ func handlePostContentTool(cl *client.Client) func(ctx context.Context, request 
 }
 
 func GetPostContentTool(cl *client.Client) (mcp.Tool, mcps.ToolHandlerFunc, error) {
-	tool := mcp.NewTool("get_quaily_post_content",
+	tool := mcp.NewTool("quaily_get_post_content",
 		mcp.WithDescription(`Return the post of a given quaily channel and post slug. The tool will return both content and paid content if the user is logged in and paid for the post.
 		The channel is specified by the channel slug.
 		If there is an URL, the tool will accept the URL as well. The URL should be in the format of "https://quaily.com/{channel_slug}/{post_slug}/content".

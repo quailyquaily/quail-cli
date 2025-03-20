@@ -164,14 +164,14 @@ The LLM will call a series of tools from quail-cli to get the answer.
 
 ### Supported tools
 
-- `login_to_quaily`: login to quaily.com.
-- `search_quaily`: search quaily.com for a given query.
-- `get_my_quaily_channels`: get all quaily channels of the current user.
-- `get_quaily_channel_posts`: get posts of a specific quaily channel.
-- `get_quaily_post_content`: get the content of a post.
-- `get_quaily_post`: get a post.
-- `publish_quaily_post`: publish a post.
-- `get_quaily_url`: get the url of a post or a channel.
+- `quaily_login`: login to quaily.com.
+- `quaily_search`: search quaily.com for a given query.
+- `quaily_get_my_channels`: get all quaily channels of the current user.
+- `quaily_get_channel_posts`: get posts of a specific quaily channel.
+- `quaily_get_post_content`: get the content of a post.
+- `quaily_get_post`: get a post.
+- `quaily_publish_post`: publish a post.
+- `quaily_get_url`: get the url of a post or a channel.
 
 ## Configuration
 

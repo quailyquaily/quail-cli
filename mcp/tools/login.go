@@ -36,7 +36,7 @@ func handleLoginTool(pctx context.Context, cl *client.Client) func(ctx context.C
 }
 
 func LoginTool(ctx context.Context, cl *client.Client) (mcp.Tool, mcps.ToolHandlerFunc, error) {
-	tool := mcp.NewTool("login_to_quaily",
+	tool := mcp.NewTool("quaily_login",
 		mcp.WithDescription("Login to quaily.com. If the browser does not open automatically, please open auth_url manually."),
 	)
 

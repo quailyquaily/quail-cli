@@ -74,7 +74,7 @@ func handleURLTool(cl *client.Client) func(ctx context.Context, request mcp.Call
 }
 
 func GetURLTool(cl *client.Client) (mcp.Tool, mcps.ToolHandlerFunc, error) {
-	tool := mcp.NewTool("get_quaily_url",
+	tool := mcp.NewTool("quaily_get_url",
 		mcp.WithDescription(`Return the url of given channel or post.
 		The format of an URL should be like:
 		- for channel: https://quaily.com/{channel_slug}

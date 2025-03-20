@@ -42,6 +42,30 @@ func (c *Client) CreatePost(listIDOrSlug string, payload map[string]any) (*PostR
 	return pr, nil
 }
 
+func (c *Client) PublishPost(listIDOrSlug, slug string) (*PostResponse, error) {
+	resp, err := c.sendRequest("PUT", fmt.Sprintf("%s/lists/%s/posts/%s/publish", c.APIBase, listIDOrSlug, slug), nil)
+	if err != nil {
+		return nil, err
+	}
+	pr := &PostResponse{}
+	if err := json.Unmarshal(resp, pr); err != nil {
+		return nil, err
+	}
+	return pr, nil
+}
+
+func (c *Client) UnpublishPost(listIDOrSlug, slug string) (*PostResponse, error) {
+	resp, err := c.sendRequest("PUT", fmt.Sprintf("%s/lists/%s/posts/%s/unpublish", c.APIBase, listIDOrSlug, slug), nil)
+	if err != nil {
+		return nil, err
+	}
+	pr := &PostResponse{}
+	if err := json.Unmarshal(resp, pr); err != nil {
+		return nil, err
+	}
+	return pr, nil
+}
+
 func (c *Client) DeletePost(listIDOrSlug string, slug string) (*PostResponse, error) {
 	resp, err := c.sendRequest("DELETE", fmt.Sprintf("%s/lists/%s/posts/%s", c.APIBase, listIDOrSlug, slug), nil)
 	if err != nil {
