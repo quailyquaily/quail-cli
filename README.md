@@ -171,6 +171,8 @@ The LLM will call a series of tools from quail-cli to get the answer.
 - `quaily_get_post_content`: get the content of a post.
 - `quaily_get_post`: get a post.
 - `quaily_publish_post`: publish a post.
+- `quaily_unpublish_post`: unpublish a post.
+- `quaily_save_post`: save a post.
 - `quaily_get_url`: get the url of a post or a channel.
 
 ## Configuration
