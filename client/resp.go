@@ -73,6 +73,14 @@ type (
 		Data List `json:"data"`
 	}
 
+	GenerateMetadataResponse struct {
+		Data struct {
+			Slug    string `json:"slug"`
+			Summary string `json:"summary"`
+			Tags    string `json:"tags"`
+		} `json:"data"`
+	}
+
 	PaginationResponse struct {
 		Pagination struct {
 			Current    uint64 `json:"current"`

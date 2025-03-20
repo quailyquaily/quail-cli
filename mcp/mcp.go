@@ -80,5 +80,19 @@ func AddTools(ctx context.Context, s *mcps.MCPServer, cl *client.Client) error {
 	}
 	s.AddTool(getPostContentTool, getPostContentToolHandler)
 
+	generateMetadataTool, generateMetadataToolHandler, err := tools.GetGenerateMetadataTool(cl)
+	if err != nil {
+		slog.Error("failed to get generate metadata tool", "error", err)
+		return err
+	}
+	s.AddTool(generateMetadataTool, generateMetadataToolHandler)
+
+	insertFrontmatterTool, insertFrontmatterToolHandler, err := tools.GetInsertFrontmatterTool(cl)
+	if err != nil {
+		slog.Error("failed to get insert frontmatter tool", "error", err)
+		return err
+	}
+	s.AddTool(insertFrontmatterTool, insertFrontmatterToolHandler)
+
 	return nil
 }
