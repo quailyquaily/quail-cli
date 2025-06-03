@@ -86,6 +86,7 @@ func NewCmd() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				cmd.Help()
+				return
 			}
 
 			format := cmd.Context().Value(common.CTX_FORMAT{}).(string)
