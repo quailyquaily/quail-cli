@@ -1,6 +1,6 @@
 ---
 name: quail-cli
-description: Help users operate Quaily from the command line with quail-cli. Use when the user wants to log in with OAuth or API key, configure quail-cli, read subscriptions and posts, read or write comments, manage author comments, publish or manage posts, output JSON for scripts, or run quail-cli as an MCP server.
+description: Help users operate Quaily from the command line with quail-cli. Use when the user wants to log in with OAuth or API key, configure quail-cli, read subscriptions and posts, read or write comments, manage author comments, publish or manage posts, or output JSON for scripts.
 ---
 
 # Quail CLI
@@ -175,22 +175,6 @@ quail-cli --json comments latest --limit 10
 ```
 
 When explaining JSON usage, prefer commands that can be piped into `jq`.
-
-## MCP Server
-
-Start the MCP server over stdio:
-
-```bash
-quail-cli mcp
-```
-
-Start the MCP server over SSE:
-
-```bash
-quail-cli mcp --sse
-```
-
-The user should log in before starting MCP unless they provide `QUAIL_API_KEY`.
 
 ## Troubleshooting
 
