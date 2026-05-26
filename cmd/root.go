@@ -15,6 +15,7 @@ import (
 	"github.com/quailyquaily/quail-cli/client"
 	"github.com/quailyquaily/quail-cli/cmd/comments"
 	"github.com/quailyquaily/quail-cli/cmd/common"
+	"github.com/quailyquaily/quail-cli/cmd/initcmd"
 	"github.com/quailyquaily/quail-cli/cmd/login"
 	"github.com/quailyquaily/quail-cli/cmd/mcp"
 	"github.com/quailyquaily/quail-cli/cmd/me"
@@ -77,6 +78,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&authBase, "auth-base", "https://quaily.com", "Quail Auth base URL")
 	rootCmd.PersistentFlags().BoolVar(&jsonOutput, "json", false, "output JSON")
 
+	rootCmd.AddCommand(initcmd.NewCmd())
 	rootCmd.AddCommand(login.NewCmd())
 	rootCmd.AddCommand(me.NewCmd())
 	rootCmd.AddCommand(post.NewCmd())
@@ -114,7 +116,7 @@ func initConfig() {
 			cl = client.New(accessToken, apiBase)
 			return
 		}
-		if isLoginCommand() {
+		if isSetupCommand() {
 			return
 		}
 		// if the config file does not exist, ask the user to login
@@ -130,6 +132,9 @@ func initConfig() {
 	// If a config file is found, read it in
 	if err := viper.ReadInConfig(); err != nil {
 		fmt.Println("failed to read config", err, "config", viper.ConfigFileUsed())
+		return
+	}
+	if isSetupCommand() {
 		return
 	}
 
@@ -169,10 +174,25 @@ func initConfig() {
 	cl = client.New(accessToken, apiBase)
 }
 
-func isLoginCommand() bool {
-	for _, arg := range os.Args[1:] {
-		if arg == "login" {
+func isSetupCommand() bool {
+	for i := 1; i < len(os.Args); i++ {
+		arg := os.Args[i]
+		if arg == "login" || arg == "init" {
 			return true
+		}
+		switch {
+		case arg == "--":
+			return false
+		case arg == "--config" || arg == "--api-base" || arg == "--auth-base":
+			i++
+			continue
+		case strings.HasPrefix(arg, "--config=") ||
+			strings.HasPrefix(arg, "--api-base=") ||
+			strings.HasPrefix(arg, "--auth-base=") ||
+			strings.HasPrefix(arg, "-"):
+			continue
+		default:
+			return false
 		}
 	}
 	return false

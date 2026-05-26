@@ -41,6 +41,7 @@ $ quail-cli [command]
 ### Available Commands
 
 - **help**: Get help about any command.
+- **init**: Create a sample config file.
 - **login**: Authenticate with Quail using OAuth or an API key.
 - **me**: Retrieve current user information.
 - **post**: Create, update, delete, or retrieve posts.
@@ -54,6 +55,24 @@ $ quail-cli [command]
 - `--config string`: Path to the configuration file (default: `$HOME/.config/quail-cli/config.yaml`).
 - `--json`: Output JSON instead of human-readable text.
 - `-h, --help`: Display help information for the `quail-cli`.
+
+### Initialize Configuration
+
+Create a sample config file:
+
+```bash
+$ quail-cli init
+```
+
+`quail-cli init` asks for an optional API key. Press Enter to leave it empty.
+
+To pass the API key without a prompt:
+
+```bash
+$ quail-cli init --api-key QK-...
+```
+
+`init` does not overwrite an existing config file.
 
 ### Authenticate with Quail
 
@@ -220,18 +239,18 @@ The LLM will call a series of tools from quail-cli to get the answer.
 
 ## Configuration
 
-By default, `quail-cli` reads from `$HOME/.config/quail-cli/config.yaml`. if the file does not exist, it will be created after the first login.
+By default, `quail-cli` reads from `$HOME/.config/quail-cli/config.yaml`. Create a sample file with `quail-cli init`, or let `quail-cli login` create it during the first login.
 
 You can specify a different configuration file by using the `--config` flag.
 
 ```bash
-$ quail-cli --config /path/to/config.yaml
+$ quail-cli --config ./config.yaml init
 ```
 
 ### Configuration File Example
 
 ```yaml
-# DO NOT modify `app` section, quail-cli will manage it.
+# quail-cli stores API key and OAuth tokens in app.
 app:
   api_key: ""
   access_token: ""
@@ -244,9 +263,8 @@ app:
     bio: "your_bio"
 
 post:
-  # frontmatter_mapping is used to map the frontmatter keys
-  # for this example:
-  # you can use`featureImage` in the frontmatter and it will be mapped to `cover_image_url`
+  # Map your Markdown frontmatter keys to Quaily post fields.
+  # In this example, "featureImage" in frontmatter maps to "cover_image_url".
   frontmatter_mapping:
     cover_image_url: featureImage
 ```

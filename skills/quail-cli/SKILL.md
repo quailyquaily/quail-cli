@@ -11,7 +11,7 @@ Help the user use `quail-cli` to work with Quaily. Give commands they can run, e
 
 Default output is human-readable. Use `--json` only when the user asks for JSON, scripting, piping, or `jq`.
 
-Never ask the user to paste an API key or token into chat. Tell them to use `quail-cli login --api-key` or `QUAIL_API_KEY` in their shell.
+Never ask the user to paste an API key or token into chat. Tell them to use `quail-cli init --api-key`, `quail-cli login --api-key`, or `QUAIL_API_KEY` in their shell.
 
 ## Install
 
@@ -48,6 +48,30 @@ quail-cli version
 ```
 
 If `quail-cli` is not found, the binary is not in `PATH`. Explain how to fix `PATH` for the user's shell only when they ask for OS-specific help.
+
+## Configuration
+
+Create a sample config file:
+
+```bash
+quail-cli init
+```
+
+`init` asks for an optional API key. Press Enter to leave it empty.
+
+To create the file and save an API key without a prompt:
+
+```bash
+quail-cli init --api-key QK-...
+```
+
+To use a non-default config path:
+
+```bash
+quail-cli --config ./config.yaml init
+```
+
+`init` does not overwrite an existing config file.
 
 ## Authentication
 
