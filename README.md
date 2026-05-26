@@ -34,6 +34,7 @@ $ quail-cli [command]
 - **login**: Authenticate with Quail using OAuth or an API key.
 - **me**: Retrieve current user information.
 - **post**: Create, update, delete, or retrieve posts.
+- **reader**: Read subscribed posts and comments.
 
 ### Global Flags
 
@@ -129,6 +130,16 @@ $ quail-cli post deliver -l your_list_slug -p your_post_slug
 
 ```bash
 $ quail-cli post delete -l your_list_slug -p your_post_slug
+```
+
+### Reader Operations
+
+```bash
+$ quail-cli reader subscriptions
+$ quail-cli reader posts --limit 20 --offset 0
+$ quail-cli reader read https://quaily.com/list-slug/post-slug
+$ quail-cli reader comments --post 123
+$ quail-cli reader comment --post 123 --content "Thanks for the post."
 ```
 
 ## Usage (MCP server)

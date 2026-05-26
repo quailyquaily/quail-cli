@@ -28,6 +28,16 @@ type (
 )
 
 type (
+	User struct {
+		ID             uint64 `json:"id"`
+		Name           string `json:"name"`
+		Email          string `json:"email"`
+		AvatarImageURL string `json:"avatar_image_url"`
+		Bio            string `json:"bio"`
+		Tagline        string `json:"tagline"`
+		Status         int    `json:"status"`
+	}
+
 	Post struct {
 		ID               uint64    `json:"id"`
 		Slug             string    `json:"slug"`
@@ -95,5 +105,59 @@ type (
 
 	SearchResponse struct {
 		Data PaginationResponse `json:"data"`
+	}
+)
+
+type (
+	Subscription struct {
+		ID           uint64     `json:"id"`
+		UserID       uint64     `json:"user_id"`
+		ListID       uint64     `json:"list_id"`
+		Type         string     `json:"type"`
+		PaidExpiry   *time.Time `json:"paid_expiry"`
+		EmailEnabled bool       `json:"email_enabled"`
+		CreatedAt    *time.Time `json:"created_at"`
+		UpdatedAt    *time.Time `json:"updated_at"`
+		User         *User      `json:"user"`
+		List         *List      `json:"list"`
+	}
+
+	SubscriptionsResponse struct {
+		Data []Subscription `json:"data"`
+	}
+
+	Comment struct {
+		ID              uint64     `json:"id"`
+		QuoteCommentID  uint64     `json:"quote_comment_id"`
+		PostID          uint64     `json:"post_id"`
+		ListID          uint64     `json:"list_id"`
+		AuthorID        uint64     `json:"author_id"`
+		Content         string     `json:"content"`
+		Status          int        `json:"status"`
+		CreatedAt       time.Time  `json:"created_at"`
+		UpdatedAt       time.Time  `json:"updated_at"`
+		Author          *User      `json:"author"`
+		Post            *Post      `json:"post"`
+		QuoteComment    *Comment   `json:"quote_comment"`
+		RepliedComments []*Comment `json:"replied_comments"`
+	}
+
+	CommentResponse struct {
+		Data Comment `json:"data"`
+	}
+
+	CommentPaginationResponse struct {
+		Pagination struct {
+			Current    uint64 `json:"current"`
+			Offset     uint64 `json:"offset"`
+			Limit      uint64 `json:"limit"`
+			NextOffset uint64 `json:"next_offset"`
+			Total      uint64 `json:"total"`
+		} `json:"pagination"`
+		Items []Comment `json:"items"`
+	}
+
+	CommentsResponse struct {
+		Data CommentPaginationResponse `json:"data"`
 	}
 )

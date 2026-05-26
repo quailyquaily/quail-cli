@@ -18,6 +18,7 @@ import (
 	"github.com/quailyquaily/quail-cli/cmd/mcp"
 	"github.com/quailyquaily/quail-cli/cmd/me"
 	"github.com/quailyquaily/quail-cli/cmd/post"
+	"github.com/quailyquaily/quail-cli/cmd/reader"
 	"github.com/quailyquaily/quail-cli/cmd/version"
 	"github.com/quailyquaily/quail-cli/oauth"
 	"github.com/quailyquaily/quail-cli/util"
@@ -74,6 +75,7 @@ func init() {
 	rootCmd.AddCommand(login.NewCmd())
 	rootCmd.AddCommand(me.NewCmd())
 	rootCmd.AddCommand(post.NewCmd())
+	rootCmd.AddCommand(reader.NewCmd())
 	rootCmd.AddCommand(mcp.NewCmd())
 	rootCmd.AddCommand(version.NewCmd())
 }
