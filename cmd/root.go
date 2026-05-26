@@ -9,6 +9,7 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/quailyquaily/quail-cli/client"
@@ -78,6 +79,7 @@ func init() {
 }
 
 func initConfig() {
+	envAPIKey := strings.TrimSpace(os.Getenv("QUAIL_API_KEY"))
 	if cfgFile != "" {
 		// Use config file from the flag
 		viper.SetConfigFile(cfgFile)
@@ -92,13 +94,27 @@ func initConfig() {
 		cfgFile = filepath.Join(fullpath, "config.yaml")
 
 		viper.SetConfigFile(cfgFile)
+	}
 
-		if _, err := os.Stat(viper.ConfigFileUsed()); os.IsNotExist(err) {
-			// if the config file does not exist, ask the user to login
-			fmt.Println("Config file does not exist. Please login.")
-			util.Login(authBase, apiBase)
+	configFile := viper.ConfigFileUsed()
+	if configFile == "" {
+		configFile = cfgFile
+	}
+	if _, err := os.Stat(configFile); os.IsNotExist(err) {
+		if envAPIKey != "" {
+			accessToken = envAPIKey
+			cl = client.New(accessToken, apiBase)
 			return
 		}
+		if isLoginCommand() {
+			return
+		}
+		// if the config file does not exist, ask the user to login
+		fmt.Println("Config file does not exist. Please login.")
+		util.Login(authBase, apiBase)
+		accessToken = viper.GetString("app.access_token")
+		cl = client.New(accessToken, apiBase)
+		return
 	}
 
 	viper.AutomaticEnv()
@@ -109,10 +125,20 @@ func initConfig() {
 		return
 	}
 
+	apiKey := envAPIKey
+	if apiKey == "" {
+		apiKey = strings.TrimSpace(viper.GetString("app.api_key"))
+	}
+	if apiKey != "" {
+		accessToken = apiKey
+		cl = client.New(accessToken, apiBase)
+		return
+	}
+
 	accessToken = viper.GetString("app.access_token")
 	expiry := viper.GetTime("app.expiry")
 
-	if time.Now().After(expiry) {
+	if accessToken != "" && !expiry.IsZero() && time.Now().After(expiry) {
 		// if the access token has expired, try to get a new one using the refresh token
 		fmt.Println("Access token has expired. Try to get new one.")
 		refreshToken := viper.GetString("app.refresh_token")
@@ -133,4 +159,13 @@ func initConfig() {
 	}
 
 	cl = client.New(accessToken, apiBase)
+}
+
+func isLoginCommand() bool {
+	for _, arg := range os.Args[1:] {
+		if arg == "login" {
+			return true
+		}
+	}
+	return false
 }

@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
-	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/quailyquaily/quail-cli/client"
 	"github.com/quailyquaily/quail-cli/oauth"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"golang.org/x/term"
 )
 
 func GetConfigFilePath() string {
@@ -23,6 +24,35 @@ func GetConfigFilePath() string {
 	}
 
 	return fullpath
+}
+
+func LoginAPIKey(apiKey string) error {
+	apiKey = strings.TrimSpace(apiKey)
+	if apiKey == "" {
+		fmt.Print("API Key: ")
+		buf, err := term.ReadPassword(int(os.Stdin.Fd()))
+		fmt.Println()
+		if err != nil {
+			return err
+		}
+		apiKey = strings.TrimSpace(string(buf))
+	}
+	if apiKey == "" {
+		return fmt.Errorf("api key is required")
+	}
+	if !strings.HasPrefix(apiKey, "QK-") {
+		return fmt.Errorf("invalid api key")
+	}
+
+	viper.Set("app.api_key", apiKey)
+
+	if err := writeConfig(); err != nil {
+		slog.Error("failed to save config", "error", err)
+		return err
+	}
+
+	fmt.Println("API key saved.")
+	return nil
 }
 
 func Login(authBase, apiBase string) (authCodeURL string, err error) {
@@ -47,15 +77,27 @@ func Login(authBase, apiBase string) (authCodeURL string, err error) {
 	viper.Set("app.user.name", result.Data.Name)
 	viper.Set("app.user.bio", result.Data.Bio)
 
-	fullpath := GetConfigFilePath()
-
-	// if the config file doesn't exist, create it first
-	err = viper.WriteConfigAs(path.Join(fullpath, "config.yaml"))
-	if err != nil {
-		slog.Error("failed to save config", "error", err, "dir", fullpath)
+	if err = writeConfig(); err != nil {
+		slog.Error("failed to save config", "error", err)
 		return
 	}
 
-	fmt.Printf("Login successful. Access token saved to %s\n", fullpath)
+	fmt.Println("Login successful.")
 	return
+}
+
+func writeConfig() error {
+	configFile := viper.ConfigFileUsed()
+	if configFile == "" {
+		configFile = filepath.Join(GetConfigFilePath(), "config.yaml")
+		viper.SetConfigFile(configFile)
+	}
+
+	if err := os.MkdirAll(filepath.Dir(configFile), 0700); err != nil {
+		return err
+	}
+	if _, err := os.Stat(configFile); err == nil {
+		return viper.WriteConfig()
+	}
+	return viper.WriteConfigAs(configFile)
 }

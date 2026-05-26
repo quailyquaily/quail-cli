@@ -31,7 +31,7 @@ $ quail-cli [command]
 ### Available Commands
 
 - **help**: Get help about any command.
-- **login**: Authenticate with Quail using OAuth.
+- **login**: Authenticate with Quail using OAuth or an API key.
 - **me**: Retrieve current user information.
 - **post**: Create, update, delete, or retrieve posts.
 
@@ -53,6 +53,14 @@ This will initiate OAuth login to authenticate with Quail. Please follow the ins
 
 1. visit the URL provided in the terminal.
 2. Authorize the application.
+
+To use an API key instead of OAuth:
+
+```bash
+$ quail-cli login --api-key
+```
+
+You can also use `QUAIL_API_KEY` for scripts.
 
 ### Retrieve Current User Information
 
@@ -190,6 +198,7 @@ $ quail-cli --config /path/to/config.yaml
 ```yaml
 # DO NOT modify `app` section, quail-cli will manage it.
 app:
+  api_key: ""
   access_token: ""
   expiry: ""
   refresh_token: ""
