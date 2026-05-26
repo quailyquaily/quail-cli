@@ -42,7 +42,7 @@ $ quail-cli [command]
 - `--api-base string`: Quail API base URL (default: `https://api.quail.ink`).
 - `--auth-base string`: Quail Auth base URL (default: `https://quaily.com`).
 - `--config string`: Path to the configuration file (default: `$HOME/.config/quail-cli/config.yaml`).
-- `--format string`: Specify output format, either `human` (human-readable) or `json` (default: `human`).
+- `--json`: Output JSON instead of human-readable text.
 - `-h, --help`: Display help information for the `quail-cli`.
 
 ### Authenticate with Quail

@@ -67,4 +67,4 @@ quail-cli reader comment --post <post_id> --content "..."
 - 付费文章在有权限时返回正文，无权限时显示清楚的错误信息。
 - 可以读取文章评论。
 - 登录用户可以发表评论。
-- `--format json` 的输出可以被 `jq` 直接处理。
+- `--json` 的输出可以被 `jq` 直接处理。

@@ -32,7 +32,7 @@ var (
 	authBase    string
 	apiBase     string
 	accessToken string
-	format      string
+	jsonOutput  bool
 	cl          *client.Client
 )
 
@@ -49,6 +49,10 @@ var rootCmd = &cobra.Command{
 		ctx = context.WithValue(ctx, common.CTX_CLIENT{}, cl)
 		ctx = context.WithValue(ctx, common.CTX_API_BASE{}, apiBase)
 		ctx = context.WithValue(ctx, common.CTX_AUTH_BASE{}, authBase)
+		format := common.FORMAT_HUMAN
+		if jsonOutput {
+			format = common.FORMAT_JSON
+		}
 		ctx = context.WithValue(ctx, common.CTX_FORMAT{}, format)
 
 		cmd.SetContext(ctx)
@@ -71,7 +75,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.config/quail-cli/config.yaml)")
 	rootCmd.PersistentFlags().StringVar(&apiBase, "api-base", "https://api.quail.ink", "Quail API base URL")
 	rootCmd.PersistentFlags().StringVar(&authBase, "auth-base", "https://quaily.com", "Quail Auth base URL")
-	rootCmd.PersistentFlags().StringVar(&format, "format", "human", "the output format (human: human readable, json: JSON)")
+	rootCmd.PersistentFlags().BoolVar(&jsonOutput, "json", false, "output JSON")
 
 	rootCmd.AddCommand(login.NewCmd())
 	rootCmd.AddCommand(me.NewCmd())

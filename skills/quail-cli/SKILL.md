@@ -37,7 +37,7 @@ format := cmd.Context().Value(common.CTX_FORMAT{}).(string)
 
 For required flags or args, show `cmd.Help()` and return. For normal API failures, print or log the concrete error and return; do not exit from deep helper functions.
 
-Support `--format json` for new read or mutation commands. Human output should be compact and scan-friendly, usually with `tabwriter` for lists.
+Support `--json` for new read or mutation commands. Human output should be compact and scan-friendly, usually with `tabwriter` for lists.
 
 ## Client Pattern
 
