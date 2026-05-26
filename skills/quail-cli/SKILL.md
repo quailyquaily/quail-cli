@@ -13,6 +13,30 @@ Default output is human-readable. Use `--json` only when the user asks for JSON,
 
 Never ask the user to paste an API key or token into chat. Tell them to use `quail-cli login --api-key` or `QUAIL_API_KEY` in their shell.
 
+## Install
+
+For most users, use the official GitHub releases page:
+
+```text
+https://github.com/quailyquaily/quail-cli/releases
+```
+
+Tell the user to download the binary for their operating system, extract it, and put the `quail-cli` binary in `PATH`.
+
+If the user has Go installed, they can install from source:
+
+```bash
+go install github.com/quailyquaily/quail-cli@latest
+```
+
+Verify installation:
+
+```bash
+quail-cli version
+```
+
+If `quail-cli` is not found, the binary is not in `PATH`. Explain how to fix `PATH` for the user's shell only when they ask for OS-specific help.
+
 ## Authentication
 
 For normal interactive use:
