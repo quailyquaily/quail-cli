@@ -1,6 +1,7 @@
 package oauth
 
 import (
+	"context"
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
@@ -9,7 +10,10 @@ import (
 	"log/slog"
 	"net/http"
 	"net/url"
+	"os"
+	"runtime"
 	"strings"
+	"time"
 
 	"github.com/lyricat/goutils/uuid"
 	"github.com/pkg/browser"
@@ -47,37 +51,59 @@ func Login(authBase, apiBase string) (*oauth2.Token, string, error) {
 	authCodeURL := conf.AuthCodeURL(state, oauth2.SetAuthURLParam("code_challenge", challenge),
 		oauth2.SetAuthURLParam("code_challenge_method", "plain"))
 
-	fmt.Printf("Please visit this URL to authorize the application:\n%v\n", authCodeURL)
+	codeChan := make(chan string, 1)
+	serverErrChan := make(chan error, 1)
 
-	// use the default browser to open the URL
-	err := browser.OpenURL(authCodeURL)
-	if err != nil {
-		slog.Error("failed to open URL", "error", err, "url", authCodeURL)
+	mux := http.NewServeMux()
+	srv := &http.Server{
+		Addr:    ":63812",
+		Handler: mux,
+	}
+
+	mux.HandleFunc("/oauth/code", func(w http.ResponseWriter, r *http.Request) {
+		code := r.URL.Query().Get("code")
+		returnedState := r.URL.Query().Get("state")
+
+		if returnedState != state {
+			slog.Error("state mismatch", "expected", state, "got", returnedState)
+			fmt.Fprintf(w, "Error: state mismatch")
+			codeChan <- ""
+			return
+		}
+
+		fmt.Fprintf(w, "Authorization successful! You can close this window.")
+		codeChan <- code
+	})
+
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			serverErrChan <- err
+		}
+	}()
+
+	fmt.Printf("Please visit this URL to authorize the application:\n%v\n", authCodeURL)
+	fmt.Printf("Waiting for authorization callback on %s\n", redirectURL)
+
+	if shouldOpenBrowser() {
+		if err := browser.OpenURL(authCodeURL); err != nil {
+			slog.Warn("failed to open browser automatically; open the URL manually", "error", err)
+		}
+	} else {
+		fmt.Println("No graphical browser detected. Open the URL manually.")
+	}
+
+	var code string
+	select {
+	case code = <-codeChan:
+	case err := <-serverErrChan:
 		return nil, authCodeURL, err
 	}
 
-	// start a local server to handle the redirect
-	codeChan := make(chan string)
-	go func() {
-		http.HandleFunc("/oauth/code", func(w http.ResponseWriter, r *http.Request) {
-			code := r.URL.Query().Get("code")
-			returnedState := r.URL.Query().Get("state")
-
-			if returnedState != state {
-				slog.Error("state mismatch", "expected", state, "got", returnedState)
-				fmt.Fprintf(w, "Error: state mismatch")
-				codeChan <- ""
-				return
-			}
-
-			fmt.Fprintf(w, "Authorization successful! You can close this window.")
-			codeChan <- code
-		})
-
-		http.ListenAndServe(":63812", nil)
-	}()
-
-	code := <-codeChan
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	if err := srv.Shutdown(shutdownCtx); err != nil {
+		slog.Warn("failed to stop OAuth callback server", "error", err)
+	}
 
 	if code == "" {
 		return nil, authCodeURL, fmt.Errorf("failed to get authorization code")
@@ -89,6 +115,18 @@ func Login(authBase, apiBase string) (*oauth2.Token, string, error) {
 	}
 
 	return token, authCodeURL, nil
+}
+
+func shouldOpenBrowser() bool {
+	if strings.TrimSpace(os.Getenv("QUAIL_CLI_NO_BROWSER")) != "" {
+		return false
+	}
+	if runtime.GOOS != "linux" {
+		return true
+	}
+	return os.Getenv("DISPLAY") != "" ||
+		os.Getenv("WAYLAND_DISPLAY") != "" ||
+		os.Getenv("BROWSER") != ""
 }
 
 func RefreshToken(apiBase, refreshToken string) (*oauth2.Token, error) {

@@ -57,6 +57,8 @@ For normal interactive use:
 quail-cli login
 ```
 
+If a browser is not available, `quail-cli` prints the OAuth URL and waits. Tell the user to open that URL manually and keep the terminal running until authorization completes.
+
 For API key login:
 
 ```bash
