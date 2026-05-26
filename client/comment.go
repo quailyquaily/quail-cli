@@ -17,6 +17,18 @@ func (c *Client) GetCommentsByPost(postID uint64, offset, limit int) (*CommentsR
 	return cr, nil
 }
 
+func (c *Client) GetCommentsByList(listIDOrSlug string, offset, limit int) (*CommentsResponse, error) {
+	resp, err := c.sendRequest("GET", fmt.Sprintf("%s/lists/%s/comments?offset=%d&limit=%d", c.APIBase, listIDOrSlug, offset, limit), nil)
+	if err != nil {
+		return nil, err
+	}
+	cr := &CommentsResponse{}
+	if err := json.Unmarshal(resp, cr); err != nil {
+		return nil, err
+	}
+	return cr, nil
+}
+
 func (c *Client) CreateComment(postID uint64, content string) (*CommentResponse, error) {
 	resp, err := c.sendRequest("POST", fmt.Sprintf("%s/comments", c.APIBase), map[string]any{
 		"post_id": postID,
@@ -30,4 +42,15 @@ func (c *Client) CreateComment(postID uint64, content string) (*CommentResponse,
 		return nil, err
 	}
 	return cr, nil
+}
+
+func (c *Client) OperateComment(commentID uint64, op string) error {
+	method := "PUT"
+	url := fmt.Sprintf("%s/comments/%d/%s", c.APIBase, commentID, op)
+	if op == "delete" {
+		method = "DELETE"
+		url = fmt.Sprintf("%s/comments/%d", c.APIBase, commentID)
+	}
+	_, err := c.sendRequest(method, url, nil)
+	return err
 }

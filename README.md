@@ -35,6 +35,7 @@ $ quail-cli [command]
 - **me**: Retrieve current user information.
 - **post**: Create, update, delete, or retrieve posts.
 - **reader**: Read subscribed posts and comments.
+- **comments**: Manage comments on your lists.
 
 ### Global Flags
 
@@ -140,6 +141,17 @@ $ quail-cli reader posts --limit 20 --offset 0
 $ quail-cli reader read https://quaily.com/list-slug/post-slug
 $ quail-cli reader comments --post 123
 $ quail-cli reader comment --post 123 --content "Thanks for the post."
+```
+
+### Comment Management
+
+```bash
+$ quail-cli comments latest --limit 50
+$ quail-cli comments list --list your_list_slug --limit 20 --offset 0
+$ quail-cli comments approve 123
+$ quail-cli comments reject 123
+$ quail-cli comments spam 123
+$ quail-cli comments delete 123
 ```
 
 ## Usage (MCP server)

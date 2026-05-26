@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/quailyquaily/quail-cli/client"
+	"github.com/quailyquaily/quail-cli/cmd/comments"
 	"github.com/quailyquaily/quail-cli/cmd/common"
 	"github.com/quailyquaily/quail-cli/cmd/login"
 	"github.com/quailyquaily/quail-cli/cmd/mcp"
@@ -76,6 +77,7 @@ func init() {
 	rootCmd.AddCommand(me.NewCmd())
 	rootCmd.AddCommand(post.NewCmd())
 	rootCmd.AddCommand(reader.NewCmd())
+	rootCmd.AddCommand(comments.NewCmd())
 	rootCmd.AddCommand(mcp.NewCmd())
 	rootCmd.AddCommand(version.NewCmd())
 }
