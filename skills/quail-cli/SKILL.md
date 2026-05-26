@@ -15,13 +15,25 @@ Never ask the user to paste an API key or token into chat. Tell them to use `qua
 
 ## Install
 
-For most users, use the official GitHub releases page:
+For macOS and Linux, install the latest release with:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/quailyquaily/quail-cli/master/scripts/install.sh | bash
+```
+
+For Windows PowerShell, install the latest release with:
+
+```powershell
+irm https://raw.githubusercontent.com/quailyquaily/quail-cli/master/scripts/install.ps1 | iex
+```
+
+If the user does not want to run a remote install script, point them to the official GitHub releases page:
 
 ```text
 https://github.com/quailyquaily/quail-cli/releases
 ```
 
-Tell the user to download the binary for their operating system, extract it, and put the `quail-cli` binary in `PATH`.
+Tell them to download the binary for their operating system, extract it, and put the `quail-cli` binary in `PATH`.
 
 If the user has Go installed, they can install from source:
 

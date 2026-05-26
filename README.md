@@ -6,9 +6,19 @@ Quail CLI interacts with the Quail API at `https://api.quail.ink`.
 
 ## Install the latest release
 
-Please Check the latest release [here](https://github.com/quailyquaily/quail-cli/releases), and download the binary for your platform.
+macOS and Linux:
 
-Please extract the binary and put it in your `PATH`.
+```bash
+curl -fsSL https://raw.githubusercontent.com/quailyquaily/quail-cli/master/scripts/install.sh | bash
+```
+
+Windows PowerShell:
+
+```powershell
+irm https://raw.githubusercontent.com/quailyquaily/quail-cli/master/scripts/install.ps1 | iex
+```
+
+You can also check the latest release [here](https://github.com/quailyquaily/quail-cli/releases), download the binary for your platform, extract it, and put it in your `PATH`.
 
 ## Install manually
 
