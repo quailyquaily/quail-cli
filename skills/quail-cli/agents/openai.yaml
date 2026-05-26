@@ -1,4 +1,4 @@
 interface:
   display_name: "Quail CLI"
-  short_description: "Maintain and extend quail-cli safely"
-  default_prompt: "Use $quail-cli to implement or review a quail-cli command."
+  short_description: "Use Quaily from the command line"
+  default_prompt: "Use $quail-cli to help me read my Quaily subscriptions."
