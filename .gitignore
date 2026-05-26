@@ -1,4 +1,4 @@
-quail-cli
+/quail-cli
 sample.md
 dist/*
 *.sh

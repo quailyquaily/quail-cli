@@ -1,0 +1,4 @@
+interface:
+  display_name: "Quail CLI"
+  short_description: "Maintain and extend quail-cli safely"
+  default_prompt: "Use $quail-cli to implement or review a quail-cli command."
