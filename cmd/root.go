@@ -89,6 +89,10 @@ func init() {
 }
 
 func initConfig() {
+	if commandName() == "version" {
+		return
+	}
+
 	envAPIKey := strings.TrimSpace(os.Getenv("QUAIL_API_KEY"))
 	if cfgFile != "" {
 		// Use config file from the flag
@@ -175,14 +179,16 @@ func initConfig() {
 }
 
 func isSetupCommand() bool {
+	cmd := commandName()
+	return cmd == "login" || cmd == "init"
+}
+
+func commandName() string {
 	for i := 1; i < len(os.Args); i++ {
 		arg := os.Args[i]
-		if arg == "login" || arg == "init" {
-			return true
-		}
 		switch {
 		case arg == "--":
-			return false
+			return ""
 		case arg == "--config" || arg == "--api-base" || arg == "--auth-base":
 			i++
 			continue
@@ -192,8 +198,8 @@ func isSetupCommand() bool {
 			strings.HasPrefix(arg, "-"):
 			continue
 		default:
-			return false
+			return arg
 		}
 	}
-	return false
+	return ""
 }

@@ -83,3 +83,6 @@ case ":$PATH:" in
     printf '  export PATH="%s:$PATH"\n' "$install_dir"
     ;;
 esac
+
+printf '\nNext step:\n'
+printf '  "%s" login\n' "${install_dir}/${binary_file}"

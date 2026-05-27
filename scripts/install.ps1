@@ -62,6 +62,10 @@ try {
             Write-Host "Added $InstallDir to the user PATH. Open a new terminal if quail-cli is not found."
         }
     }
+
+    Write-Host ""
+    Write-Host "Next step:"
+    Write-Host "  & `"$Target`" login"
 }
 finally {
     if (Test-Path $TempDir) {
