@@ -66,11 +66,15 @@ func Login(authBase, apiBase string) (*oauth2.Token, string, error) {
 		fmt.Println("No graphical browser detected. Open the URL manually.")
 	}
 
-	if !term.IsTerminal(int(os.Stdin.Fd())) {
-		return nil, authCodeURL, fmt.Errorf("authorization code input requires an interactive terminal")
+	input, closeInput, err := authorizationCodeInput()
+	if err != nil {
+		return nil, authCodeURL, err
+	}
+	if closeInput != nil {
+		defer closeInput()
 	}
 
-	code, err := readAuthorizationCode(os.Stdin)
+	code, err := readAuthorizationCode(input)
 	if err != nil {
 		return nil, authCodeURL, err
 	}
@@ -98,6 +102,21 @@ func readAuthorizationCode(in io.Reader) (string, error) {
 		return "", err
 	}
 	return strings.TrimSpace(code), nil
+}
+
+func authorizationCodeInput() (io.Reader, func(), error) {
+	if term.IsTerminal(int(os.Stdin.Fd())) {
+		return os.Stdin, nil, nil
+	}
+
+	if runtime.GOOS != "windows" {
+		tty, err := os.Open("/dev/tty")
+		if err == nil {
+			return tty, func() { _ = tty.Close() }, nil
+		}
+	}
+
+	return nil, nil, fmt.Errorf("authorization code input requires an interactive terminal")
 }
 
 func shouldOpenBrowser() bool {
