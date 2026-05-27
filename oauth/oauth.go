@@ -1,7 +1,7 @@
 package oauth
 
 import (
-	"context"
+	"bufio"
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
@@ -13,17 +13,17 @@ import (
 	"os"
 	"runtime"
 	"strings"
-	"time"
 
 	"github.com/lyricat/goutils/uuid"
 	"github.com/pkg/browser"
 	"golang.org/x/oauth2"
+	"golang.org/x/term"
 )
 
 const (
 	authPath     = "/oauth/authorize"
 	tokenPath    = "/oauth/token"
-	redirectURL  = "http://localhost:63812/oauth/code"
+	redirectPath = "/oauth/code"
 	clientID     = "e9139b6e-298a-43e4-91f0-fc97960e281a"
 	clientSecret = ""
 )
@@ -34,8 +34,11 @@ func Login(authBase, apiBase string) (*oauth2.Token, string, error) {
 	verifier := generateCodeVerifier()
 	challenge := verifier
 
-	authURL := fmt.Sprintf("%s%s", authBase, authPath)
-	tokenURL := fmt.Sprintf("%s%s", authBase, tokenPath)
+	authBase = strings.TrimRight(authBase, "/")
+	apiBase = strings.TrimRight(apiBase, "/")
+	authURL := authBase + authPath
+	tokenURL := authBase + tokenPath
+	redirectURL := oauthRedirectURL(authBase)
 
 	conf := &oauth2.Config{
 		ClientID:     clientID,
@@ -51,38 +54,9 @@ func Login(authBase, apiBase string) (*oauth2.Token, string, error) {
 	authCodeURL := conf.AuthCodeURL(state, oauth2.SetAuthURLParam("code_challenge", challenge),
 		oauth2.SetAuthURLParam("code_challenge_method", "plain"))
 
-	codeChan := make(chan string, 1)
-	serverErrChan := make(chan error, 1)
-
-	mux := http.NewServeMux()
-	srv := &http.Server{
-		Addr:    ":63812",
-		Handler: mux,
-	}
-
-	mux.HandleFunc("/oauth/code", func(w http.ResponseWriter, r *http.Request) {
-		code := r.URL.Query().Get("code")
-		returnedState := r.URL.Query().Get("state")
-
-		if returnedState != state {
-			slog.Error("state mismatch", "expected", state, "got", returnedState)
-			fmt.Fprintf(w, "Error: state mismatch")
-			codeChan <- ""
-			return
-		}
-
-		fmt.Fprintf(w, "Authorization successful! You can close this window.")
-		codeChan <- code
-	})
-
-	go func() {
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			serverErrChan <- err
-		}
-	}()
-
 	fmt.Printf("Please visit this URL to authorize the application:\n%v\n", authCodeURL)
-	fmt.Printf("Waiting for authorization callback on %s\n", redirectURL)
+	fmt.Printf("After authorization, copy the code from the browser page and paste it here.\n")
+	fmt.Printf("The browser page also shows state. It should match: %s\n", state)
 
 	if shouldOpenBrowser() {
 		if err := browser.OpenURL(authCodeURL); err != nil {
@@ -92,29 +66,38 @@ func Login(authBase, apiBase string) (*oauth2.Token, string, error) {
 		fmt.Println("No graphical browser detected. Open the URL manually.")
 	}
 
-	var code string
-	select {
-	case code = <-codeChan:
-	case err := <-serverErrChan:
+	if !term.IsTerminal(int(os.Stdin.Fd())) {
+		return nil, authCodeURL, fmt.Errorf("authorization code input requires an interactive terminal")
+	}
+
+	code, err := readAuthorizationCode(os.Stdin)
+	if err != nil {
 		return nil, authCodeURL, err
 	}
-
-	shutdownCtx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-	if err := srv.Shutdown(shutdownCtx); err != nil {
-		slog.Warn("failed to stop OAuth callback server", "error", err)
-	}
-
 	if code == "" {
 		return nil, authCodeURL, fmt.Errorf("failed to get authorization code")
 	}
 
-	token, err := exchangeCodeForToken(apiBase, code, verifier)
+	token, err := exchangeCodeForToken(apiBase, code, verifier, redirectURL)
 	if err != nil {
 		return nil, authCodeURL, fmt.Errorf("failed to exchange code for token: %v", err)
 	}
 
 	return token, authCodeURL, nil
+}
+
+func oauthRedirectURL(authBase string) string {
+	return strings.TrimRight(authBase, "/") + redirectPath
+}
+
+func readAuthorizationCode(in io.Reader) (string, error) {
+	fmt.Print("Authorization code: ")
+	reader := bufio.NewReader(in)
+	code, err := reader.ReadString('\n')
+	if err != nil && err != io.EOF {
+		return "", err
+	}
+	return strings.TrimSpace(code), nil
 }
 
 func shouldOpenBrowser() bool {
@@ -170,7 +153,7 @@ func generateCodeVerifier() string {
 	return base64.RawURLEncoding.EncodeToString(b)
 }
 
-func exchangeCodeForToken(apiBase, code, verifier string) (*oauth2.Token, error) {
+func exchangeCodeForToken(apiBase, code, verifier, redirectURL string) (*oauth2.Token, error) {
 	data := url.Values{}
 	data.Set("grant_type", "authorization_code")
 	data.Set("code", code)
@@ -178,7 +161,7 @@ func exchangeCodeForToken(apiBase, code, verifier string) (*oauth2.Token, error)
 	data.Set("client_id", clientID)
 	data.Set("code_verifier", verifier)
 
-	tokenURL := fmt.Sprintf("%s%s", apiBase, tokenPath)
+	tokenURL := strings.TrimRight(apiBase, "/") + tokenPath
 
 	req, err := http.NewRequest("POST", tokenURL, strings.NewReader(data.Encode()))
 	if err != nil {

@@ -81,7 +81,9 @@ For normal interactive use:
 quail-cli login
 ```
 
-If a browser is not available, `quail-cli` prints the OAuth URL and waits. Tell the user to open that URL manually and keep the terminal running until authorization completes.
+`quail-cli` prints the OAuth URL. After authorization, tell the user to copy the code shown in the browser and paste it back into the terminal.
+
+If a browser is not available on the machine running `quail-cli`, tell the user to open the printed URL on another machine where they are logged in.
 
 For API key login:
 

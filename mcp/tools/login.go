@@ -19,9 +19,9 @@ func handleLoginTool(pctx context.Context, cl *client.Client) func(ctx context.C
 		var msg string
 		authCodeURL, err := util.Login(authBase, apiBase)
 		if err != nil {
-			msg = fmt.Sprintf("failed to login. error=%v, auth_url=%s. If the browser does not open automatically, please open auth_url manually.", err, authCodeURL)
+			msg = fmt.Sprintf("failed to login. error=%v, auth_url=%s. OAuth login requires an interactive terminal. Run quail-cli login in a terminal, or use an API key.", err, authCodeURL)
 		} else {
-			msg = fmt.Sprintf("login successfully. auth_url=%s. If the browser does not open automatically, please open auth_url manually.", authCodeURL)
+			msg = fmt.Sprintf("login successfully. auth_url=%s.", authCodeURL)
 		}
 
 		return &mcp.CallToolResult{
@@ -37,7 +37,7 @@ func handleLoginTool(pctx context.Context, cl *client.Client) func(ctx context.C
 
 func LoginTool(ctx context.Context, cl *client.Client) (mcp.Tool, mcps.ToolHandlerFunc, error) {
 	tool := mcp.NewTool("quaily_login",
-		mcp.WithDescription("Login to quaily.com. If the browser does not open automatically, please open auth_url manually."),
+		mcp.WithDescription("Login to quaily.com. OAuth login requires an interactive terminal; API key auth is preferred for MCP."),
 	)
 
 	return tool, handleLoginTool(ctx, cl), nil

@@ -82,10 +82,12 @@ $ quail-cli login
 
 This will initiate OAuth login to authenticate with Quail. Please follow the instructions to complete the authentication process.
 
-1. visit the URL provided in the terminal.
+1. Visit the URL provided in the terminal.
 2. Authorize the application.
+3. Copy the code shown in the browser.
+4. Paste the code back into the terminal.
 
-If a browser cannot be opened automatically, `quail-cli` will keep waiting. Open the printed URL manually and leave the terminal running until authorization completes.
+If a browser cannot be opened automatically, open the printed URL manually.
 
 To use an API key instead of OAuth:
 

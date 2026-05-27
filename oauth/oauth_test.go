@@ -2,8 +2,27 @@ package oauth
 
 import (
 	"runtime"
+	"strings"
 	"testing"
 )
+
+func TestOAuthRedirectURL(t *testing.T) {
+	got := oauthRedirectURL("https://quaily.com/")
+	want := "https://quaily.com/oauth/code"
+	if got != want {
+		t.Fatalf("oauthRedirectURL() = %q, want %q", got, want)
+	}
+}
+
+func TestReadAuthorizationCode(t *testing.T) {
+	code, err := readAuthorizationCode(strings.NewReader(" abc123 \n"))
+	if err != nil {
+		t.Fatalf("readAuthorizationCode() error = %v", err)
+	}
+	if code != "abc123" {
+		t.Fatalf("readAuthorizationCode() = %q, want %q", code, "abc123")
+	}
+}
 
 func TestShouldOpenBrowserDisabledByEnv(t *testing.T) {
 	t.Setenv("QUAIL_CLI_NO_BROWSER", "1")
